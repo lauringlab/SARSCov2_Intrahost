@@ -1,0 +1,206 @@
+
+### Author: Andrew Valesano
+### Purpose: Get variant calls from alignment files (from Snakefile-BWA) with iVar.
+### This is designed for using the ARTIC primers for SARS-CoV-2 sequenced on Illumina.
+
+# ============================= How to run this pipeline ==========================
+
+# 1. Modify the parameters below as needed ("rule parameters").
+# 2. Load modules: module load Bioinformatics ivar python2.7-anaconda/2019.03 samtools/1.9 fastqc bowtie2/2.1.0 picard-tools bwa bedtools2 R
+# 3. Activate snakemake: conda activate snakemake
+# 4. Run job on Slurm: sbatch submit_variants.sbat -- Or run directly: snakemake -s Snakefile-variants -p --latency-wait 30 --cores 2
+
+# ============================= Configure run options here =============================
+
+IDS, = glob_wildcards("data/aligned_output/primertrim_sorted/{id}.removed.primertrim.sorted.bam") # Where the pipeline will grab all of the IDs to run. Important to have changed the filenames first.
+
+rule all:
+    input:
+        "data/ivar_output/all.variants.csv",
+        "data/ivar_output/all.variants.filtered.csv"
+        #expand("data/ivar_output/variants_final/{id}.variants.final.tsv", id = IDS),
+	#expand("data/ivar_output/variants/{id}.variants.tsv", id = IDS)
+
+rule parameters:
+    params:
+        reference_fasta = "~/ncov_references/bwa_ref/nCov_WH1_ref.fasta", # fasta used for alignment
+        min_Q_score = 0, # minimum base quality for including base in mpileup
+        min_mapQ = 0, # minimum mapping quality for including base in mpileup
+        min_depth = 1, # minimum depth used in iVar variants
+        freq_threshold = 0, # minimum frequency to call variants
+        orf_file = "~/ncov_references/WH1_ORFs.gff",
+        #bed_file = "~/artic-ncov2019/primer_schemes/nCoV-2019/V3/nCoV-2019.bed", # BED file for trimming primer sequences
+        bed_file = "~/ncov_references/ncov_ivar_bed.bed", # BED file for trimming primer sequences. Modified for ivar getmasked (added score parameter). See https://genome.ucsc.edu/FAQ/FAQformat.html#format1 and ivar documentation.
+        primer_info = "~/ncov_references/primer_info.tsv",
+        primer_fasta = "~/artic-ncov2019/primer_schemes/nCoV-2019/V3/nCoV-2019.primers.fa"
+
+setup = rules.parameters.params
+
+# ============================= Here are the pipeline rules =============================
+
+rule variants:
+    message:
+        """
+        =======================================================
+        Call variants with iVar
+        =======================================================
+        """
+    input:
+        "data/aligned_output/primertrim_sorted/{id}.removed.primertrim.sorted.bam"
+    output:
+        "data/ivar_output/variants/{id}.variants.tsv"
+    params:
+        ivar_out = "data/ivar_output/variants/{id}.variants"
+    shell:
+        "samtools mpileup -aa -A -d 100000 -Q 0 -x --reference {setup.reference_fasta} {input} | ivar variants -p {params.ivar_out} -t {setup.freq_threshold} -m {setup.min_depth} -r {setup.reference_fasta} -g {setup.orf_file}"
+
+rule index:
+    message:
+        """
+        =======================================================
+        Create bwa index file
+        =======================================================
+        """
+    input:
+        "data/ivar_output/consensus/{id}.consensus.fa"
+    output:
+        "data/ivar_output/consensus_index/{id}.bwt"
+    params:
+        idx_out = "data/ivar_output/consensus_index/{id}"
+    shell:
+        "bwa index -p {params.idx_out} {input}"
+
+rule create_primer_bam:
+    message:
+        """
+        =======================================================
+        Create primer bam file per sample
+        =======================================================
+        """
+    input:
+        "data/ivar_output/consensus_index/{id}.bwt"
+    output:
+        "data/ivar_output/primer_bed/{id}.bam"
+    params:
+        index = "data/ivar_output/consensus_index/{id}"
+    shell:
+        """
+        bwa mem -k 5 -T 16 {params.index} {setup.primer_fasta} | samtools view -bS -F 4 | samtools sort -o {output}
+        """
+
+rule create_bed:
+    message:
+        """
+        =======================================================
+        Create primer bed file per sample
+        =======================================================
+        """
+    input:
+        "data/ivar_output/primer_bed/{id}.bam"
+    output:
+        "data/ivar_output/primer_bed/{id}.bed"
+    shell:
+        """
+        bedtools bamtobed -i {input} > {output}
+        """
+
+rule call_variants_in_primer:
+    message:
+        """
+        =======================================================
+        Call variants in primers to get mismatches
+        =======================================================
+        """
+    input:
+        primer_bam = "data/ivar_output/primer_bed/{id}.bam",
+        sample_consensus = "data/ivar_output/consensus/{id}.consensus.fa"
+    output:
+        "data/ivar_output/primer_mismatches/{id}.tsv"
+    shell:
+        "samtools mpileup -aa -A -d 100000 --reference {input.sample_consensus} -Q {setup.min_Q_score} -q {setup.min_mapQ} -F 0 {input.primer_bam} | ivar variants -p {output} -t {setup.freq_threshold}"
+
+# may need to modify below to account for filenames, and correct inputs
+rule mask:
+    message:
+        """
+        =======================================================
+        Mask primer segments with mismatches to consensus
+        =======================================================
+        """
+    input:
+        mismatch_tsv = "data/ivar_output/primer_mismatches/{id}.tsv",
+        sample_bed = "data/ivar_output/primer_bed/{id}.bed",
+    output:
+        "data/ivar_output/mask/{id}_masked_primer_names.txt"
+    shell:
+        "ivar getmasked -i {input.mismatch_tsv} -b {input.sample_bed}  -f {setup.primer_info} -p {output}"
+
+rule remove_masked:
+    message:
+        """
+        =======================================================
+        Remove reads with mismatches to consensus
+        =======================================================
+        """
+    input:
+        bam_file = "data/aligned_output/primertrim_sorted/{id}.removed.primertrim.sorted.bam",
+        mask_file = "data/ivar_output/mask/{id}_masked_primer_names.txt"
+    output:
+        "data/ivar_output/removed/{id}.masked.sorted.bam"
+    params:
+        remove_out = "data/ivar_output/removed/{id}.masked",
+        temp = "data/ivar_output/removed/{id}.tmp"
+    shell:
+        """
+        ivar removereads -i {input.bam_file} -p {params.remove_out} -t {input.mask_file} -b {setup.bed_file}
+        samtools sort -T {params.temp} -o {output} {params.remove_out}.bam
+        samtools index {output}
+        """
+
+rule variants_post_removal:
+    message:
+        """
+        =======================================================
+        Call variants with iVar after mismatch removal
+        =======================================================
+        """
+    input:
+        "data/ivar_output/removed/{id}.masked.sorted.bam"
+    output:
+        "data/ivar_output/variants_final/{id}.variants.final.tsv"
+    params:
+        ivar_out = "data/ivar_output/variants_final/{id}.variants.final"
+    shell:
+        "samtools mpileup -aa -A -d 100000 -B -Q {setup.min_Q_score} -q {setup.min_mapQ} --reference {setup.reference_fasta} {input} | ivar variants -p {params.ivar_out} -t {setup.freq_threshold} -m {setup.min_depth} -r {setup.reference_fasta} -g {setup.orf_file}"
+
+
+rule combine_variants:
+    message:
+        """
+        =======================================================
+        Combine variants into csv files
+        =======================================================
+        """
+    input:
+        expand("data/ivar_output/variants_final/{id}.variants.final.tsv", id = IDS),
+        expand("data/ivar_output/variants/{id}.variants.tsv", id = IDS)
+    output:
+        "data/ivar_output/all.variants.csv",
+        "data/ivar_output/all.variants.filtered.csv"
+    shell:
+        "Rscript ~/ncov_pipeline/CombineVariantFilesPipeline.R"
+
+rule clean:
+    message: "Removing directories: {params}"
+    params:
+        "data/ivar_output/variants ",
+        "data/ivar_output/variants_final ",
+        "data/ivar_output/mask ",
+        "data/ivar_output/removed ",
+        "data/ivar_output/primer_bed ",
+        "data/ivar_output/primer_mismatches ",
+        "data/ivar_output/consensus_index ",
+        "data/ivar_output/all.variants.csv ",
+       	"data/ivar_output/all.variants.filtered.csv "
+    shell:
+        "rm -rfv {params}"

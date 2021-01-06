@@ -1,0 +1,159 @@
+
+### Author: Andrew Valesano
+### Purpose: Get consensus genomes from Illumina sequencing data.
+### This is designed for using the ARTIC primers for SARS-CoV-2 sequenced on Illumina.
+
+# ============================= How to run this pipeline ==========================
+
+# 1. Modify the parameters below as needed ("rule parameters").
+# 2. Load modules: module load Bioinformatics ivar python2.7-anaconda/2019.03 samtools/1.9 fastqc picard-tools bwa bedtools2 R
+# 3. Copy fastq files to data/fastq.
+# 4. Rename raw fastq files: python ~/variant_pipeline_resources/change_miseq_names_sars2.py -s data/fastq -f data/fastq_renamed -run
+# 5. Unzip fastq files: gunzip -v data/fastq_renamed/*.gz
+# 6. Activate snakemake: conda activate snakemake
+# 7. Run job on Slurm: sbatch submit_snakemake.sbat -- Or run directly: snakemake -s Snakefile-BWA -p --latency-wait 30 --cores 2
+
+# ============================= Configure run options here =============================
+
+IDS, = glob_wildcards("data/fastq_renamed/{id}.1.fastq") # Where the pipeline will grab all of the IDs to run. Important to have changed the filenames first.
+
+rule all:
+    input:
+        "data/ivar_output/all.consensus.fasta",
+        "data/ivar_output/coverage.csv"
+
+rule parameters:
+    params:
+        bed_file = "~/ncov_references/ncov_ivar_bed_WH1.bed",
+        reference_fasta = "~/ncov_references/bwa_ref/nCov_WH1_ref.fasta", # fasta used for alignment
+        reference_index = "~/ncov_references/bwa_ref/WH1", # bwa index used for alignment. Should be a build of reference_fasta
+        min_length = 29000, # minimum length of consensus genomes in final fasta file
+        name = "run", # Goes into the coverage.csv output file for tracking
+        min_qual_score = 0, # minimum quality score used in iVar consensus. Important that this is zero for calling indels.
+        consensus_threshold = 0, # frequency threshold value used in iVar consensus. See documentation.
+        min_depth = 10, # minimum depth used in iVar consensus
+        cutadapt_seq_fwd = "AGATCGGAAGAGCACACGTCTGAACTCCAGTCA", # sequence used for adapter trimming. This is NEBnext (same as TruSeq). Nextera adapter sequence, forward and reverse: CTGTCTCTTATACACATCT
+        cutadapt_seq_rev = "AGATCGGAAGAGCGTCGTGTAGGGAAAGAGTGT",
+        bowtie_option = "--very-sensitive-local", # bowtie2 mapping option
+        human_ref = "/nfs/turbo/med-alauring2/avalesan/human_ref/hr38" # path to the human reference genome for filtering
+
+setup = rules.parameters.params
+
+# ============================= Here are the pipeline rules =============================
+
+rule fastqc:
+    message:
+        """
+        =======================================================
+        Run FastQC
+        =======================================================
+        """
+    input:
+        reads_1_in = "data/fastq_renamed/{id}.1.fastq",
+        reads_2_in = "data/fastq_renamed/{id}.2.fastq"
+    output:
+        "data/aligned_output/fastqc/{id}.1_fastqc.zip",
+        "data/aligned_output/fastqc/{id}.2_fastqc.zip"
+    run:
+        shell("fastqc -o data/aligned_output/fastqc --noextract -f fastq {input.reads_1_in}")
+        shell("fastqc -o data/aligned_output/fastqc --noextract -f fastq {input.reads_2_in}")
+
+rule bwa_align:
+    message:
+        """
+        =======================================================
+        Map with BWA and sort
+        =======================================================
+        """
+    input:
+        reads_1_in = "data/fastq_renamed/{id}.1.fastq",
+        reads_2_in = "data/fastq_renamed/{id}.2.fastq"
+    output:
+        bam = "data/aligned_output/align/{id}.sorted.bam"
+    shell:
+        "bwa mem {setup.reference_index} {input.reads_1_in} {input.reads_2_in} | samtools view -F 4 -Sb | samtools sort -o {output.bam} && samtools index {output.bam}"
+
+rule ivar_trim:
+    message:
+        """
+        =======================================================
+        Trim the ARTIC primers with iVar
+        =======================================================
+        """
+    input:
+        "data/aligned_output/align/{id}.sorted.bam"
+    output:
+        "data/aligned_output/primertrim/{id}.sorted.primertrim.bam"
+    shell:
+        "ivar trim -i {input} -b {setup.bed_file} -p {output}"
+
+rule sort_bam:
+    message:
+        """
+        =======================================================
+        Sort the primer-trimmed file
+        =======================================================
+        """
+    input:
+        "data/aligned_output/primertrim/{id}.sorted.primertrim.bam"
+    output:
+        bam = "data/aligned_output/primertrim_sorted/{id}.removed.primertrim.sorted.bam",
+        bai = "data/aligned_output/primertrim_sorted/{id}.removed.primertrim.sorted.bai"
+    shell:
+        "PicardCommandLine SortSam SO=coordinate INPUT={input} OUTPUT={output.bam} VALIDATION_STRINGENCY=LENIENT CREATE_INDEX=true"
+        #"samtools sort {input} -o {output}" # Old version
+
+rule get_coverage:
+    message:
+        """
+        =======================================================
+        Get coverage with samtools
+        =======================================================
+        """
+    input:
+        "data/aligned_output/primertrim_sorted/{id}.removed.primertrim.sorted.bam"
+    output:
+        "data/ivar_output/coverage/{id}.coverage.csv"
+    shell:
+        "samtools depth -a -d 100000 {input} > {output}"
+
+rule get_consensus:
+    message:
+        """
+        =======================================================
+        Get the consensus sequence with iVar
+        =======================================================
+        """
+    input:
+        bam_file = "data/aligned_output/primertrim_sorted/{id}.removed.primertrim.sorted.bam"
+    output:
+        consensus_file = "data/ivar_output/consensus/{id}.consensus.fa"
+    shell:
+        "samtools mpileup -a -A -d 100000 -Q 0 --reference {setup.reference_fasta} {input.bam_file} | ivar consensus -p {output.consensus_file} -n N -q {setup.min_qual_score} -t {setup.consensus_threshold} -m {setup.min_depth}"
+
+rule combine_and_export:
+    message:
+        """
+        =======================================================
+        Combine into a single fasta and coverage file
+        =======================================================
+        """
+    input:
+        coverage_files = expand("data/ivar_output/coverage/{id}.coverage.csv", id = IDS),
+        consensus_files = expand("data/ivar_output/consensus/{id}.consensus.fa", id = IDS),
+        fastqc_1 = expand("data/aligned_output/fastqc/{id}.1_fastqc.zip", id = IDS),
+        fastqc_2 = expand("data/aligned_output/fastqc/{id}.2_fastqc.zip", id = IDS)
+    output:
+        "data/ivar_output/all.consensus.fasta",
+        "data/ivar_output/coverage.csv"
+    shell:
+        "python ~/variant_pipeline_resources/ivar_CombineAndExport.py --run-info {setup.name} --min-length {setup.min_length}"
+
+
+rule clean:
+    message: "Removing directories: {params}"
+    params:
+        "data/aligned_output ",
+        "data/ivar_output"
+    shell:
+        "rm -rfv {params}"
