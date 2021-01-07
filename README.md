@@ -11,7 +11,8 @@ This repository holds code and data for our paper on SARS-CoV-2 intrahost divers
     |- data  
     |  |- metadata/   # Sample metadata for the specimens sequenced in this study.
     |  |- reference/  # Reference files used in data analysis pipelines.
-    |  |- raw/        # Output data from pipelines and used for analyses in most of paper.
+    |  |- raw/        # Output data from pipelines, except files >100MB.
+    |  |- processed/  # Intermediate files. Used for most analyses.
     |  |- tree/       # TreeTime output for consensus phylogenetic tree.
     |  |- mixing/     # Data from synthetic RNA mixture experiment
     |- scripts/       # Code for analyses presented in manuscript.
