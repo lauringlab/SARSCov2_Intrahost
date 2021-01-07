@@ -1,0 +1,440 @@
+IQ-TREE multicore version 2.0.3 for Linux 64-bit built Apr 26 2020
+Developed by Bui Quang Minh, Nguyen Lam Tung, Olga Chernomor,
+Heiko Schmidt, Dominik Schrempf, Michael Woodhams.
+
+Host:    gl3036.arc-ts.umich.edu (AVX512, FMA3, 187 GB RAM)
+Command: iqtree -redo -nt AUTO -me 0.05 -bb 1000 -wbtl -czb -m GTR --prefix data/iqtree_output/michigan_timetree -s data/all.consensus.wref2.aln.mask.fasta -o Wuhan/WH01/2019
+Seed:    149336 (Using SPRNG - Scalable Parallel Random Number Generator)
+Time:    Mon Dec 21 16:50:32 2020
+Kernel:  AVX+FMA - auto-detect threads (2 CPU cores detected)
+
+Reading alignment file data/all.consensus.wref2.aln.mask.fasta ... Fasta format detected
+Alignment most likely contains DNA/RNA sequences
+WARNING: 228 sites contain only gaps or ambiguous characters.
+Alignment has 214 sequences with 29911 columns, 414 distinct patterns
+54 parsimony-informative, 182 singleton sites, 29675 constant sites
+                 Gap/Ambiguity  Composition  p-value
+   1  S_2006_000912      3.05%    passed     99.90%
+   2  10034244391        3.10%    passed     99.43%
+   3  S_2006_001087      3.33%    passed     99.85%
+   4  S_2006_000924      2.05%    passed     99.94%
+   5  S_2006_000964      2.04%    passed     99.97%
+   6  10033808341        1.73%    passed     99.95%
+   7  10033789519        1.72%    passed     99.96%
+   8  S_2006_000873      1.84%    passed     99.75%
+   9  Wuhan/WH01/2019    0.79%    passed     99.96%
+  10  Wuhan-Hu-1         0.79%    passed     99.96%
+  11  10033797611        1.83%    passed     99.94%
+  12  S_2006_000875      2.04%    passed    100.00%
+  13  S_2006_001082      2.17%    passed     99.97%
+  14  10033836873        2.11%    passed     99.98%
+  15  S_2006_000941      1.76%    passed     99.99%
+  16  10033852420        1.32%    passed    100.00%
+  17  S_2006_000874      1.33%    passed     99.93%
+  18  S_2006_000913      1.51%    passed     99.99%
+  19  10033798803        1.51%    passed    100.00%
+  20  10034006376        1.51%    passed     99.99%
+  21  S_2006_000983      1.51%    passed     99.99%
+  22  10034012043        1.51%    passed     99.98%
+  23  S_2006_001039      1.51%    passed     99.99%
+  24  S_2006_001045      1.51%    passed     99.98%
+  25  10034056764        1.51%    passed     99.98%
+  26  S_2006_000895      1.51%    passed     99.99%
+  27  S_2006_000997      1.51%    passed     99.99%
+  28  S_2006_000892      1.51%    passed     99.99%
+  29  10033928982        1.51%    passed     99.99%
+  30  10033797461        1.51%    passed    100.00%
+  31  S_2006_000943      1.51%    passed     99.99%
+  32  S_2006_000977      1.51%    passed     99.99%
+  33  S_2006_000963      1.51%    passed     99.99%
+  34  S_2006_000905      1.51%    passed     99.99%
+  35  S_2006_000991      1.51%    passed    100.00%
+  36  S_2006_001041      1.51%    passed     99.99%
+  37  S_2006_001052      1.51%    passed     99.99%
+  38  S_2006_000896      1.51%    passed     99.99%
+  39  10033906276        1.51%    passed     99.99%
+  40  S_2006_001055      1.51%    passed     99.99%
+  41  S_2006_000868      1.51%    passed     99.99%
+  42  S_2006_000907      1.51%    passed     99.99%
+  43  10033815825        1.51%    passed     99.99%
+  44  S_2006_001056      1.51%    passed     99.99%
+  45  S_2006_001125      1.49%    passed     99.98%
+  46  S_2006_000922      1.51%    passed     99.99%
+  47  10033871564        1.51%    passed     99.99%
+  48  S_2006_000898      1.51%    passed     99.99%
+  49  10033797804        1.51%    passed     99.99%
+  50  S_2006_000880      1.51%    passed     99.99%
+  51  S_2006_000876      1.51%    passed     99.99%
+  52  S_2006_000897      1.51%    passed     99.99%
+  53  10033793415        1.51%    passed     99.99%
+  54  S_2006_000911      1.51%    passed     99.99%
+  55  S_2006_000861      1.51%    passed     99.99%
+  56  S_2006_000891      1.51%    passed     99.99%
+  57  S_2006_000981      1.51%    passed     99.99%
+  58  S_2006_000877      1.53%    passed    100.00%
+  59  S_2006_001115      1.00%    passed    100.00%
+  60  10033903914        1.04%    passed     99.99%
+  61  S_2006_000916      1.06%    passed     99.99%
+  62  S_2006_000954      1.13%    passed     99.95%
+  63  10033920353        1.09%    passed     99.98%
+  64  10033916721        1.04%    passed     99.97%
+  65  10033851156        1.02%    passed     99.97%
+  66  S_2006_000976      1.03%    passed     99.95%
+  67  S_2006_001118      1.04%    passed     99.97%
+  68  S_2006_000969      1.04%    passed     99.97%
+  69  S_2006_001095      1.03%    passed     99.97%
+  70  S_2006_005728      1.03%    passed     99.97%
+  71  10034110078        1.06%    passed     99.96%
+  72  10033991503        1.05%    passed     99.97%
+  73  10034240230        1.06%    passed     99.95%
+  74  10033851236        1.07%    passed     99.94%
+  75  10033785306        1.08%    passed     99.98%
+  76  S_2006_001014      1.15%    passed    100.00%
+  77  S_2006_001119      1.13%    passed     99.99%
+  78  S_2006_000927      1.12%    passed     99.99%
+  79  S_2006_001116      1.13%    passed     99.99%
+  80  S_2006_001104      1.13%    passed     99.99%
+  81  S_2006_000932      1.13%    passed     99.99%
+  82  S_2006_000867      1.13%    passed     99.99%
+  83  S_2006_001112      1.13%    passed     99.99%
+  84  S_2006_000930      1.13%    passed     99.99%
+  85  10034148754        1.13%    passed     99.99%
+  86  10033866753        1.13%    passed     99.99%
+  87  10033792777        1.13%    passed     99.99%
+  88  S_2006_001016      1.13%    passed     99.99%
+  89  10033901123        1.13%    passed     99.99%
+  90  S_2006_000984      1.13%    passed     99.99%
+  91  S_2006_000882      1.13%    passed     99.99%
+  92  S_2006_000931      1.13%    passed     99.99%
+  93  S_2006_000866      1.13%    passed     99.99%
+  94  S_2006_001057      1.13%    passed     99.99%
+  95  10033833216        1.13%    passed     99.99%
+  96  S_2006_000899      1.13%    passed     99.99%
+  97  S_2006_000864      1.13%    passed     99.99%
+  98  S_2006_001085      0.89%    passed    100.00%
+  99  S_2006_001093      0.79%    passed     99.94%
+ 100  S_2006_000881      0.79%    passed     99.94%
+ 101  S_2006_000851      0.79%    passed     99.94%
+ 102  10033872707        0.82%    passed    100.00%
+ 103  S_2006_000960      0.84%    passed    100.00%
+ 104  10033769080        0.83%    passed     99.99%
+ 105  10033834090        0.82%    passed    100.00%
+ 106  S_2006_000934      0.81%    passed     99.99%
+ 107  S_2006_001042      0.79%    passed    100.00%
+ 108  10033818339        0.80%    passed     99.97%
+ 109  10034135987        0.79%    passed    100.00%
+ 110  10034004586        0.79%    passed    100.00%
+ 111  10033852483        0.79%    passed     99.99%
+ 112  10033842393        0.79%    passed    100.00%
+ 113  S_2006_001043      0.79%    passed    100.00%
+ 114  S_2006_000870      0.79%    passed    100.00%
+ 115  S_2006_000863      0.79%    passed     99.99%
+ 116  10033836752        0.79%    passed    100.00%
+ 117  10033981968        0.79%    passed    100.00%
+ 118  10033813745        0.79%    passed     99.99%
+ 119  10033818123        0.79%    passed    100.00%
+ 120  S_2006_001036      0.79%    passed    100.00%
+ 121  S_2006_001040      0.79%    passed    100.00%
+ 122  S_2006_001130      0.79%    passed    100.00%
+ 123  10033872085        0.79%    passed    100.00%
+ 124  S_2006_001111      0.79%    passed    100.00%
+ 125  10033973539        0.79%    passed    100.00%
+ 126  S_2006_001102      0.79%    passed    100.00%
+ 127  S_2006_000852      0.79%    passed    100.00%
+ 128  10033882288        0.79%    passed    100.00%
+ 129  10033829306        0.79%    passed    100.00%
+ 130  S_2006_001117      0.79%    passed    100.00%
+ 131  10033828725        0.79%    passed     99.99%
+ 132  S_2006_000856      0.79%    passed    100.00%
+ 133  10033776027        0.79%    passed    100.00%
+ 134  S_2006_000959      0.79%    passed    100.00%
+ 135  A00000000JU        0.79%    passed    100.00%
+ 136  10033828729        0.79%    passed    100.00%
+ 137  S_2006_000857      0.79%    passed    100.00%
+ 138  S_2006_001122      0.79%    passed    100.00%
+ 139  10033776047        0.79%    passed    100.00%
+ 140  S_2006_000956      0.79%    passed    100.00%
+ 141  10033767074        0.79%    passed    100.00%
+ 142  10033854135        0.87%    passed    100.00%
+ 143  10033907638        0.79%    passed     99.99%
+ 144  S_2006_001009      0.79%    passed    100.00%
+ 145  S_2006_005727      0.79%    passed    100.00%
+ 146  10033827292        0.79%    passed    100.00%
+ 147  10033768659        0.79%    passed    100.00%
+ 148  10033782000        0.79%    passed    100.00%
+ 149  10033876044        0.79%    passed    100.00%
+ 150  10033766580        0.79%    passed     99.99%
+ 151  10033792343        0.79%    passed    100.00%
+ 152  10033792025        0.79%    passed    100.00%
+ 153  10033810376        0.79%    passed    100.00%
+ 154  10033916720        0.79%    passed    100.00%
+ 155  10034010951        0.79%    passed    100.00%
+ 156  10033871586        0.79%    passed     99.99%
+ 157  10033876035        0.79%    passed    100.00%
+ 158  S_2006_000858      0.79%    passed    100.00%
+ 159  10033872219        0.79%    passed    100.00%
+ 160  S_2006_001092      0.79%    passed    100.00%
+ 161  10033971920        0.79%    passed    100.00%
+ 162  S_2006_001288      0.79%    passed    100.00%
+ 163  S_2006_000853      0.79%    passed    100.00%
+ 164  10033759721        0.81%    passed    100.00%
+ 165  10033775516        0.79%    passed    100.00%
+ 166  S_2006_000850      0.79%    passed    100.00%
+ 167  S_2006_005725      0.79%    passed    100.00%
+ 168  10033783681        0.79%    passed    100.00%
+ 169  10033781516        0.79%    passed    100.00%
+ 170  10033774911        0.79%    passed    100.00%
+ 171  S_2006_001097      0.79%    passed    100.00%
+ 172  10033760952        0.79%    passed    100.00%
+ 173  10033759038        0.79%    passed    100.00%
+ 174  S_2006_001114      0.79%    passed    100.00%
+ 175  10033809081        0.79%    passed    100.00%
+ 176  10033808660        0.79%    passed    100.00%
+ 177  10033811348        0.79%    passed    100.00%
+ 178  S_2006_001135      0.79%    passed    100.00%
+ 179  10033851497        0.79%    passed    100.00%
+ 180  10033781702        0.79%    passed    100.00%
+ 181  S_2006_000935      0.79%    passed    100.00%
+ 182  10033798318        0.79%    passed    100.00%
+ 183  10033768049        0.79%    passed    100.00%
+ 184  10033793198        0.79%    passed    100.00%
+ 185  10033768108        0.79%    passed    100.00%
+ 186  10033785805        0.79%    passed    100.00%
+ 187  S_2006_000915      0.79%    passed    100.00%
+ 188  10034005736        0.79%    passed    100.00%
+ 189  S_2006_000872      0.90%    passed    100.00%
+ 190  10033808445        0.91%    passed    100.00%
+ 191  S_2006_000944      0.88%    passed    100.00%
+ 192  S_2006_000883      0.88%    passed    100.00%
+ 193  S_2006_001069      1.37%    passed     99.88%
+ 194  10033792567        1.35%    passed     99.93%
+ 195  S_2006_001098      1.28%    passed     99.96%
+ 196  S_2006_000889      1.68%    passed     99.98%
+ 197  S_2006_000888      1.61%    passed     99.99%
+ 198  S_2006_000980      2.53%    passed     99.67%
+ 199  S_2006_000909      2.62%    passed     99.83%
+ 200  S_2006_001089      1.79%    passed     99.95%
+ 201  10033792551        2.33%    passed     99.80%
+ 202  10033864153        2.26%    passed     99.79%
+ 203  S_2006_001053      2.05%    passed     99.90%
+ 204  S_2006_000886      2.06%    passed     99.72%
+ 205  S_2006_000961      2.07%    passed     99.68%
+ 206  S_2006_001015      2.07%    passed     99.69%
+ 207  S_2006_000894      2.96%    passed     99.53%
+ 208  S_2006_001081      2.94%    passed     99.87%
+ 209  S_2006_000917      2.58%    passed     99.65%
+ 210  S_2006_000940      2.41%    passed     99.64%
+ 211  10033852722        2.91%    passed     99.72%
+ 212  S_2006_001044      1.92%    passed     99.96%
+ 213  S_2006_000879      2.75%    passed     99.59%
+ 214  10033820198        2.49%    passed     99.79%
+****  TOTAL              1.22%  0 sequences failed composition chi2 test (p-value<5%; df=3)
+NOTE: 10033815825 is identical to S_2006_000907 but kept for subsequent analysis
+NOTE: S_2006_000969 is identical to S_2006_001118 but kept for subsequent analysis
+NOTE: S_2006_005728 is identical to S_2006_001095 but kept for subsequent analysis
+NOTE: S_2006_000984 is identical to 10033901123 but kept for subsequent analysis
+NOTE: S_2006_001102 is identical to 10033973539 but kept for subsequent analysis
+NOTE: S_2006_000857 is identical to 10033828729 but kept for subsequent analysis
+NOTE: 10033767074 is identical to S_2006_000956 but kept for subsequent analysis
+NOTE: 10033792025 is identical to 10033792343 but kept for subsequent analysis
+NOTE: 45 identical sequences (see below) will be ignored for subsequent analysis
+NOTE: S_2006_000922 (identical to S_2006_000907) is ignored but added at the end
+NOTE: 10033871564 (identical to S_2006_000907) is ignored but added at the end
+NOTE: S_2006_000898 (identical to S_2006_000907) is ignored but added at the end
+NOTE: 10033797804 (identical to S_2006_000907) is ignored but added at the end
+NOTE: S_2006_000880 (identical to S_2006_000907) is ignored but added at the end
+NOTE: S_2006_000876 (identical to S_2006_000907) is ignored but added at the end
+NOTE: S_2006_000897 (identical to S_2006_000907) is ignored but added at the end
+NOTE: 10033793415 (identical to S_2006_000907) is ignored but added at the end
+NOTE: S_2006_000911 (identical to S_2006_000907) is ignored but added at the end
+NOTE: S_2006_000861 (identical to S_2006_000907) is ignored but added at the end
+NOTE: S_2006_000891 (identical to S_2006_000907) is ignored but added at the end
+NOTE: S_2006_000981 (identical to S_2006_000907) is ignored but added at the end
+NOTE: S_2006_000882 (identical to 10033901123) is ignored but added at the end
+NOTE: S_2006_000931 (identical to 10033901123) is ignored but added at the end
+NOTE: S_2006_000866 (identical to 10033901123) is ignored but added at the end
+NOTE: S_2006_001057 (identical to 10033901123) is ignored but added at the end
+NOTE: 10033833216 (identical to 10033901123) is ignored but added at the end
+NOTE: S_2006_000899 (identical to 10033901123) is ignored but added at the end
+NOTE: S_2006_000864 (identical to 10033901123) is ignored but added at the end
+NOTE: 10033768659 (identical to S_2006_000956) is ignored but added at the end
+NOTE: 10033876035 (identical to S_2006_000956) is ignored but added at the end
+NOTE: 10033775516 (identical to S_2006_000956) is ignored but added at the end
+NOTE: S_2006_000850 (identical to S_2006_000956) is ignored but added at the end
+NOTE: S_2006_005725 (identical to S_2006_000956) is ignored but added at the end
+NOTE: 10033783681 (identical to S_2006_000956) is ignored but added at the end
+NOTE: 10033781516 (identical to S_2006_000956) is ignored but added at the end
+NOTE: 10033774911 (identical to S_2006_000956) is ignored but added at the end
+NOTE: S_2006_001097 (identical to S_2006_000956) is ignored but added at the end
+NOTE: 10033760952 (identical to S_2006_000956) is ignored but added at the end
+NOTE: 10033759038 (identical to S_2006_000956) is ignored but added at the end
+NOTE: S_2006_001114 (identical to S_2006_000956) is ignored but added at the end
+NOTE: 10033809081 (identical to S_2006_000956) is ignored but added at the end
+NOTE: 10033808660 (identical to S_2006_000956) is ignored but added at the end
+NOTE: 10033811348 (identical to S_2006_000956) is ignored but added at the end
+NOTE: S_2006_001135 (identical to S_2006_000956) is ignored but added at the end
+NOTE: 10033851497 (identical to S_2006_000956) is ignored but added at the end
+NOTE: 10033781702 (identical to S_2006_000956) is ignored but added at the end
+NOTE: S_2006_000935 (identical to S_2006_000956) is ignored but added at the end
+NOTE: 10033798318 (identical to S_2006_000956) is ignored but added at the end
+NOTE: 10033768049 (identical to S_2006_000956) is ignored but added at the end
+NOTE: 10033793198 (identical to S_2006_000956) is ignored but added at the end
+NOTE: 10033768108 (identical to S_2006_000956) is ignored but added at the end
+NOTE: 10033785805 (identical to S_2006_000956) is ignored but added at the end
+NOTE: S_2006_000915 (identical to S_2006_000956) is ignored but added at the end
+NOTE: 10034005736 (identical to S_2006_000956) is ignored but added at the end
+Alignment was printed to data/iqtree_output/michigan_timetree.uniqueseq.phy
+
+For your convenience alignment with unique sequences printed to data/iqtree_output/michigan_timetree.uniqueseq.phy
+Creating fast initial parsimony tree by random order stepwise addition...
+0.169 seconds, parsimony score: 242 (based on 236 sites)
+Generating 1000 samples for ultrafast bootstrap (seed: 149336)...
+
+NOTE: 3 MB RAM (0 GB) is required!
+Measuring multi-threading efficiency up to 2 CPU cores
+Increase to 10 rounds for branch lengths
+140 trees examined
+Threads: 1 / Time: 2.009 sec / Speedup: 1.000 / Efficiency: 100% / LogL: -44815
+Threads: 2 / Time: 1.693 sec / Speedup: 1.187 / Efficiency: 59% / LogL: -44815
+BEST NUMBER OF THREADS: 2
+
+Estimate model parameters (epsilon = 0.500)
+1. Initial log-likelihood: -43064.373
+2. Current log-likelihood: -42903.079
+Optimal log-likelihood: -42903.079
+Rate parameters:  A-C: 0.32704  A-G: 1.53801  A-T: 0.07777  C-G: 0.27311  C-T: 4.91347  G-T: 1.00000
+Base frequencies:  A: 0.299  C: 0.184  G: 0.196  T: 0.321
+Parameters optimization took 2 rounds (0.170 sec)
+Computing ML distances based on estimated model parameters... 0.103 sec
+Computing BIONJ tree...
+0.012 seconds
+Log-likelihood of BIONJ tree: -42903.708
+--------------------------------------------------------------------
+|             INITIALIZING CANDIDATE TREE SET                      |
+--------------------------------------------------------------------
+Generating 98 parsimony trees... 7.752 second
+Computing log-likelihood of 98 initial trees ... 0.622 seconds
+Current best score: -42903.078
+
+Do NNI search on 20 best initial trees
+Estimate model parameters (epsilon = 0.500)
+BETTER TREE FOUND at iteration 1: -42903.068
+BETTER TREE FOUND at iteration 2: -42903.067
+BETTER TREE FOUND at iteration 3: -42903.065
+BETTER TREE FOUND at iteration 8: -42903.052
+Iteration 10 / LogL: -42903.067 / Time: 0h:0m:16s
+BETTER TREE FOUND at iteration 12: -42903.038
+BETTER TREE FOUND at iteration 15: -42903.008
+BETTER TREE FOUND at iteration 20: -42902.991
+Iteration 20 / LogL: -42902.991 / Time: 0h:0m:21s
+Finish initializing candidate tree set (20)
+Current best tree score: -42902.991 / CPU time: 16.974
+Number of iterations: 20
+--------------------------------------------------------------------
+|               OPTIMIZING CANDIDATE TREE SET                      |
+--------------------------------------------------------------------
+Iteration 30 / LogL: -42929.862 / Time: 0h:0m:24s (0h:1m:14s left)
+Iteration 40 / LogL: -42919.524 / Time: 0h:0m:27s (0h:0m:55s left)
+Iteration 50 / LogL: -42908.470 / Time: 0h:0m:30s (0h:0m:43s left)
+Log-likelihood cutoff on original alignment: -42960.048
+UFBoot trees printed to data/iqtree_output/michigan_timetree.ufboot
+Iteration 60 / LogL: -42905.994 / Time: 0h:0m:35s (0h:0m:35s left)
+Iteration 70 / LogL: -42912.441 / Time: 0h:0m:39s (0h:0m:28s left)
+Iteration 80 / LogL: -42928.240 / Time: 0h:0m:42s (0h:0m:21s left)
+Iteration 90 / LogL: -42905.790 / Time: 0h:0m:45s (0h:0m:15s left)
+Iteration 100 / LogL: -42903.463 / Time: 0h:0m:48s (0h:0m:9s left)
+Log-likelihood cutoff on original alignment: -42960.913
+NOTE: Bootstrap correlation coefficient of split occurrence frequencies: 0.973
+NOTE: UFBoot does not converge, continue at least 100 more iterations
+UFBoot trees printed to data/iqtree_output/michigan_timetree.ufboot
+Iteration 110 / LogL: -42921.325 / Time: 0h:0m:54s (0h:0m:44s left)
+Iteration 120 / LogL: -42903.471 / Time: 0h:0m:58s (0h:0m:38s left)
+Iteration 130 / LogL: -42906.172 / Time: 0h:1m:1s (0h:0m:33s left)
+Iteration 140 / LogL: -42934.191 / Time: 0h:1m:5s (0h:0m:28s left)
+Iteration 150 / LogL: -42903.624 / Time: 0h:1m:9s (0h:0m:23s left)
+Log-likelihood cutoff on original alignment: -42961.322
+UFBoot trees printed to data/iqtree_output/michigan_timetree.ufboot
+Iteration 160 / LogL: -42912.542 / Time: 0h:1m:14s (0h:0m:18s left)
+Iteration 170 / LogL: -42942.139 / Time: 0h:1m:18s (0h:0m:13s left)
+Iteration 180 / LogL: -42919.044 / Time: 0h:1m:22s (0h:0m:9s left)
+Iteration 190 / LogL: -42903.359 / Time: 0h:1m:25s (0h:0m:4s left)
+Iteration 200 / LogL: -42932.403 / Time: 0h:1m:30s (0h:0m:0s left)
+Log-likelihood cutoff on original alignment: -42960.913
+NOTE: Bootstrap correlation coefficient of split occurrence frequencies: 0.960
+NOTE: UFBoot does not converge, continue at least 100 more iterations
+UFBoot trees printed to data/iqtree_output/michigan_timetree.ufboot
+Iteration 210 / LogL: -42908.690 / Time: 0h:1m:35s (0h:0m:40s left)
+Iteration 220 / LogL: -42905.755 / Time: 0h:1m:39s (0h:0m:36s left)
+Iteration 230 / LogL: -42924.222 / Time: 0h:1m:43s (0h:0m:31s left)
+Iteration 240 / LogL: -42924.287 / Time: 0h:1m:48s (0h:0m:27s left)
+Iteration 250 / LogL: -42912.413 / Time: 0h:1m:52s (0h:0m:22s left)
+Log-likelihood cutoff on original alignment: -42960.913
+UFBoot trees printed to data/iqtree_output/michigan_timetree.ufboot
+Iteration 260 / LogL: -42910.084 / Time: 0h:1m:58s (0h:0m:18s left)
+Iteration 270 / LogL: -42903.276 / Time: 0h:2m:3s (0h:0m:13s left)
+Iteration 280 / LogL: -42906.068 / Time: 0h:2m:7s (0h:0m:9s left)
+Iteration 290 / LogL: -42918.977 / Time: 0h:2m:11s (0h:0m:4s left)
+Iteration 300 / LogL: -42924.592 / Time: 0h:2m:16s (0h:0m:0s left)
+Log-likelihood cutoff on original alignment: -42960.913
+NOTE: Bootstrap correlation coefficient of split occurrence frequencies: 0.977
+NOTE: UFBoot does not converge, continue at least 100 more iterations
+UFBoot trees printed to data/iqtree_output/michigan_timetree.ufboot
+Iteration 310 / LogL: -42906.100 / Time: 0h:2m:22s (0h:0m:41s left)
+Iteration 320 / LogL: -42906.117 / Time: 0h:2m:27s (0h:0m:36s left)
+Iteration 330 / LogL: -42903.295 / Time: 0h:2m:32s (0h:0m:32s left)
+Iteration 340 / LogL: -42924.043 / Time: 0h:2m:37s (0h:0m:27s left)
+Iteration 350 / LogL: -42909.677 / Time: 0h:2m:42s (0h:0m:23s left)
+Log-likelihood cutoff on original alignment: -42961.691
+UFBoot trees printed to data/iqtree_output/michigan_timetree.ufboot
+Iteration 360 / LogL: -43030.309 / Time: 0h:2m:49s (0h:0m:18s left)
+Iteration 370 / LogL: -42903.227 / Time: 0h:2m:55s (0h:0m:14s left)
+Iteration 380 / LogL: -42905.753 / Time: 0h:3m:0s (0h:0m:9s left)
+Iteration 390 / LogL: -42918.054 / Time: 0h:3m:5s (0h:0m:4s left)
+Iteration 400 / LogL: -42905.838 / Time: 0h:3m:11s (0h:0m:0s left)
+Log-likelihood cutoff on original alignment: -42961.691
+NOTE: Bootstrap correlation coefficient of split occurrence frequencies: 0.992
+UFBoot trees printed to data/iqtree_output/michigan_timetree.ufboot
+TREE SEARCH COMPLETED AFTER 400 ITERATIONS / Time: 0h:3m:13s
+
+--------------------------------------------------------------------
+|                    FINALIZING TREE SEARCH                        |
+--------------------------------------------------------------------
+Performs final model parameters optimization
+Estimate model parameters (epsilon = 0.050)
+1. Initial log-likelihood: -42902.991
+Optimal log-likelihood: -42902.991
+Rate parameters:  A-C: 0.32606  A-G: 1.53591  A-T: 0.08162  C-G: 0.27355  C-T: 4.91285  G-T: 1.00000
+Base frequencies:  A: 0.299  C: 0.184  G: 0.196  T: 0.321
+Parameters optimization took 1 rounds (0.017 sec)
+BEST SCORE FOUND : -42902.991
+Creating bootstrap support values...
+Split supports printed to NEXUS file data/iqtree_output/michigan_timetree.splits.nex
+Collapsing near-zero internal branches... 136 collapsed
+Total tree length: 0.008
+
+Total number of iterations: 400
+CPU time used for tree search: 309.199 sec (0h:5m:9s)
+Wall-clock time used for tree search: 188.873 sec (0h:3m:8s)
+Total CPU time used: 315.733 sec (0h:5m:15s)
+Total wall-clock time used: 193.915 sec (0h:3m:13s)
+UFBoot trees printed to data/iqtree_output/michigan_timetree.ufboot
+
+Computing bootstrap consensus tree...
+Reading input file data/iqtree_output/michigan_timetree.splits.nex...
+169 taxa and 9104 splits.
+Consensus tree written to data/iqtree_output/michigan_timetree.contree
+Reading input trees file data/iqtree_output/michigan_timetree.contree
+Log-likelihood of consensus tree: -42909.867
+
+Analysis results written to: 
+  IQ-TREE report:                data/iqtree_output/michigan_timetree.iqtree
+  Maximum-likelihood tree:       data/iqtree_output/michigan_timetree.treefile
+  Likelihood distances:          data/iqtree_output/michigan_timetree.mldist
+
+Ultrafast bootstrap approximation results written to:
+  Split support values:          data/iqtree_output/michigan_timetree.splits.nex
+  Consensus tree:                data/iqtree_output/michigan_timetree.contree
+  UFBoot trees:                  data/iqtree_output/michigan_timetree.ufboot
+  Screen log file:               data/iqtree_output/michigan_timetree.log
+
+Date and Time: Mon Dec 21 16:53:47 2020
