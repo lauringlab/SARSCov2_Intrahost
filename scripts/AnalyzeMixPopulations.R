@@ -153,24 +153,28 @@ left_join(sensitivity, groups, by = "ID") %>%
 #arrange(sensitivity_groups, -copies, -frequency) %>% select(copies, frequency, true_positives) %>% View()
 
 variants_final %>%
-  filter(expected == FALSE) %>%
+  filter(expected == FALSE & copies > 1000) %>%
   group_by(mutation) %>%
-  summarize(count = n()) -> FP_counts # why are some positions piling up?
+  summarize(count = n()) -> FP_counts
 
 variants_final %>%
+  filter(!POS %in% c(3350, 6669, 13248, 13914) & POS < 29803) %>%
   group_by(ID) %>%
   filter(expected == FALSE) %>%
   summarize(FP = n()) -> false_positives
 
-left_join(false_positives, groups, by = "ID") -> false_positives_meta
+left_join(groups, false_positives, by = "ID") -> false_positives_meta
+
+false_positives_meta$FP[is.na(false_positives_meta$FP)] <- 0
 
 fp.by.copies <- ggplot(false_positives_meta, aes(x = as.factor(copies), y = FP)) +
-  geom_jitter(width = 0.1, color = "coral2") +
-  geom_boxplot(alpha = 0) +
+  geom_jitter(width = 0.1, fill = "coral2", size = 3, shape = 21, height = 0) +
+  geom_boxplot(alpha = 0, width = 0.5) +
   theme_bw() +
-  scale_y_log10() +
+  #scale_y_log10() +
   xlab("Copies") +
   ylab("False Positives Per Sample") # PDF 4 by 4
+fp.by.copies
 
 # ============================ Observed by expected for true positives =========================
 

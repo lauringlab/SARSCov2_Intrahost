@@ -96,6 +96,8 @@ variants_final <- mutate(variants_final, type = ifelse(!is.na(GFF_FEATURE) & ALT
 
 variants_final_processed <- filter(variants_final, type != "Stop" & POS != 11083) # Remove position 11083, error-prone
 
+variants_final_processed <- filter(variants_final_processed, !POS %in% c(3350, 6669, 13248, 13914)) # Removes six variants at 13914. Total of 409 iSNV identified.
+
 #write.csv(variants_final_processed, "data/processed/processed.variants.csv")
 #variants_final_processed <- read.csv("data/processed/processed.variants.csv", stringsAsFactors = FALSE)
 
@@ -135,6 +137,15 @@ coding.changes.plot <- freq.histogram | mutation.type.by.gene # 5 by 12
 metadata_variants <- filter(metadata, ID %in% variants_analyze$ID) 
 nrow(metadata_variants) # 178
 #write.csv(metadata_variants, "data/metadata/metadata_called_variants.csv")
+
+# increase in iSNV frequency by day? Nope.
+variants_final_processed_meta <- left_join(variants_final_processed, metadata_variants, by = "ID")
+ggplot(variants_final_processed_meta, aes(x = DPSO, y = ALT_FREQ)) +
+  geom_jitter() +
+  theme_bw()
+
+freq.model <- lm(ALT_FREQ ~ log(N1_copynum_final, 10) + DPSO, data = variants_final_processed_meta)
+summary(freq.model) # DPSO p = 0.75
 
 variants_final_processed %>%
   group_by(ID) %>%
@@ -206,17 +217,24 @@ snv.by.day <- ggplot() +
   scale_fill_manual(name = "", values = c("#575294", "#00B2A9")) +
   theme(text = element_text(size = 15)) +
   scale_x_continuous(breaks = c(-5, 0, 5, 10, 15, 20, 25)) +
-  scale_y_continuous(breaks = seq(0, 50, 10)) +
+  scale_y_continuous(breaks = seq(0, 10, by = 5)) +
   theme(text = element_text(size = 10), legend.position = "none") # PDF 4 by 8 for full plot, 4 by 6 for max_isnv of 15
 
 snv.model <- lm(iSNV ~ log(N1_copynum_final, 10) + DPSO, data = minor_counts_meta)
-summary(snv.model)
+summary(snv.model) # DPSO p = 0.79
 
-# No difference in iSNV richness between the two groups. p = 0.29.
+snv.model.day <- lm(iSNV ~ DPSO, data = minor_counts_meta)
+summary(snv.model.day) # DPSO alone: p = 0.23
+
+# Remove outliers
+snv.model.filtered <- lm(iSNV ~ log(N1_copynum_final, 10) + DPSO, data = filter(minor_counts_meta, iSNV < 15))
+summary(snv.model.filtered) # no outliers: DPSO p = 0.36
+
+# No difference in iSNV richness between the two groups. p = 0.25.
 wilcox.test(iSNV ~ group, data = minor_counts_meta)
 
 compare.groups.plot <- ggplot() +
-  geom_jitter(data = minor_counts_meta, aes(x = as.factor(group), y = iSNV, color = group), alpha = 0.7, width = 0.25) +
+  geom_jitter(data = minor_counts_meta, aes(x = as.factor(group), y = iSNV, color = group), alpha = 0.7, width = 0.25, height = 0) +
   geom_boxplot(data = minor_counts_meta, aes(x = as.factor(group), y = iSNV), alpha = 0) +
   scale_color_manual(name = "", values = c("#575294", "#00B2A9")) +
   geom_boxplot(alpha = 0, outlier.shape = NULL) +
@@ -225,3 +243,5 @@ compare.groups.plot <- ggplot() +
   xlab("") +
   ylab("Minor iSNV Per Sample") +
   theme(text = element_text(size = 10)) # PDF 4 by 4
+
+
